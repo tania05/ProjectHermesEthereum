@@ -89,9 +89,6 @@ contract ProjectHermes {
 			throw;
 		}
 
-		bytes32 hash = sha256(_msgId, _privateNonce);
-		HashGenerated(hash, message.privateHash);
-
 		if(verifyPrivateHash(_msgId, _privateNonce)) {
 			addMessageCarrier(_msgId);
 
