@@ -7,6 +7,7 @@ contract ProjectHermes {
 
 	struct MessageInfo {
 		bool exists;
+		address sender;
 		bytes32 publicHash;
 		bytes32 privateHash;
 		address[] messageCarrierWallets; //Something like a set instead of array would be more ideal, but we can work with this.
@@ -47,7 +48,7 @@ contract ProjectHermes {
 			throw;
 		}
 
-		messages[_msgId] = MessageInfo(true, _hashFromPubNonce, _hasFromPrivNonce, new address[](0));
+		messages[_msgId] = MessageInfo(true, msg.sender, _hashFromPubNonce, _hasFromPrivNonce, new address[](0));
 		MessageInfo message = messages[_msgId];
 		MessageUpdated(_msgId, message.publicHash, message.privateHash, message.messageCarrierWallets);
 
@@ -62,7 +63,9 @@ contract ProjectHermes {
 
 		MessageInfo message = messages[_msgId];
 
-		if(!message.exists) {
+		//We don't want to try to add message carriers to a message that doesn't exist
+		//and we don't want to allow message senders to add themselves as carriers
+		if(!message.exists || message.sender == msg.sender) {
 			throw;
 		}
 
@@ -80,7 +83,9 @@ contract ProjectHermes {
 
 		MessageInfo message = messages[_msgId];
 
-		if(!message.exists) {
+		//We don't want to try to receive a message that doesn't exist
+		//and we don't want to allow message senders to receive their own message
+		if(!message.exists || message.sender == msg.sender) {
 			throw;
 		}
 
