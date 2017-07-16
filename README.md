@@ -1,16 +1,19 @@
-I'll include the address of the smart contract once its final version has been deployed. I'll also include the application binary interface (ABI) as well. Both of these will be necessary in order for the mobile devices to interact with the smart contract. Since the smart contract is still under development, these are still subject to change regularly, so I'm not including them for now.
 
 ## Contract Address
 
-You will need to know the address where the of the smart contract before you can interact with it. The contract is stored on the Rinkeby network at the following address `TODO`
+You will need to know the address where the of the smart contract before you can interact with it. The contract is stored on the Rinkeby network at the following address `0xAc7d48eb7Ca5bcd18a03c3C517EA1238D80D1cf4`
+
+**IMPORTANT:** If the contract is changed and redeployed, the above address will still point to the old version of the contract. We need to remember to update the contract address if we redeploy it.
 
 ## Application Binary Interface (ABI)
 
 You will be required to specify the ABI before you can interact with the smart contract. The ABI is stored in JSON format below:
 
 ```
-TODO
+[ { "constant": false, "inputs": [ { "name": "_msgId", "type": "string" }, { "name": "_hashFromPubNonce", "type": "bytes32" }, { "name": "_hasFromPrivNonce", "type": "bytes32" } ], "name": "newMessage", "outputs": [], "payable": true, "type": "function" }, { "constant": false, "inputs": [ { "name": "_msgId", "type": "string" }, { "name": "_publicNonce", "type": "string" } ], "name": "addHop", "outputs": [], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "_msgId", "type": "string" }, { "name": "_privateNonce", "type": "string" } ], "name": "receiveMessage", "outputs": [], "payable": false, "type": "function" }, { "inputs": [], "payable": false, "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_valueSent", "type": "uint256" }, { "indexed": false, "name": "_minValue", "type": "uint256" } ], "name": "NotEnoughMessageValue", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_msgId", "type": "string" }, { "indexed": false, "name": "_publicHash", "type": "bytes32" }, { "indexed": false, "name": "_privateHash", "type": "bytes32" }, { "indexed": false, "name": "_msgCarrierWallets", "type": "address[]" } ], "name": "MessageUpdated", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_amount", "type": "uint256" } ], "name": "GlobalPoolUpdated", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_actualHash", "type": "bytes32" }, { "indexed": false, "name": "_expectedHash", "type": "bytes32" } ], "name": "HashGenerated", "type": "event" } ]
 ```
+
+**IMPORTANT:** If the contract is changed and redeployed, the above ABI *may* become outdated (unless the interface has not changed). We need to remember to check if the ABI needs to be updated if the contract is redeployed.
 
 ## Contract Usage
 
