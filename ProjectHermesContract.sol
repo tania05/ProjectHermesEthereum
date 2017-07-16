@@ -69,7 +69,10 @@ contract ProjectHermes {
 			throw;
 		}
 
-		if(verifyPublicHash(_msgId, _publicNonce)) {
+		bytes32 hash = sha256(_msgId, _publicNonce);
+		HashGenerated(hash, message.publicHash);
+
+		if(message.publicHash == hash) {
 			addMessageCarrier(_msgId);
 		}
 	}
@@ -89,7 +92,10 @@ contract ProjectHermes {
 			throw;
 		}
 
-		if(verifyPrivateHash(_msgId, _privateNonce)) {
+		bytes32 hash = sha256(_msgId, _privateNonce);
+		HashGenerated(hash, message.privateHash);
+
+		if(message.privateHash == hash) {
 			addMessageCarrier(_msgId);
 
 			address[] wallets = message.messageCarrierWallets;
@@ -108,27 +114,6 @@ contract ProjectHermes {
 
 		GlobalPoolUpdated(globalPool);
 		MessageUpdated(_msgId, message.publicHash, message.privateHash, message.messageCarrierWallets);
-	}
-
-	//The hashed message ID concatenated with the public nonce should be the same as the 
-	//public hash stored for the message with the given ID. The public nonce
-	//is intended to be transmitted in clear text along with the message, so
-	//anyone who helps carry a message would be able to compute the public hash.
-	function verifyPublicHash(string _msgId, string _publicNonce) private returns (bool) {
-		MessageInfo message = messages[_msgId];
-		bytes32 hash = sha256(_msgId, _publicNonce);
-		HashGenerated(hash, message.publicHash);
-		return message.publicHash == hash;
-	}
-	//The hashed message ID concatenated with the private nonce should be the same as the
-	//private hash stored for the message with the given ID. The private nonce
-	//is intended to be transmitted under encryption along with the message,
-	//so only the recipient of the message would be able to compute the private hash
-	function verifyPrivateHash(string _msgId, string _privateNonce) private returns (bool) {
-		MessageInfo message = messages[_msgId];
-		bytes32 hash = sha256(_msgId, _privateNonce);
-		HashGenerated(hash, message.privateHash);
-		return message.privateHash == hash;
 	}
 
 	//Adds a user's wallet to the list of wallets corresponding to the
