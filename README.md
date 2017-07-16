@@ -41,3 +41,10 @@ This will be called by a the intended recipient of a message.
 The `_msgId` should be provided in cleartext as part of the message when the sender originally sent it. The `_privateNonce` should be encrypted such that only the recipient can decrypt it.
 
 The smart contract will compute the SHA-256 hash of the `_msgID` concatenated with the `_privateNonce` and compare with the private hash that it has stored for that message. If they match, then the smart contract will store the user's wallet to indicate that the user helped carry the message. This is to provide incentive for the recipient to call `receiveMessage`. Additionally, a random user from the list of users who helped carry the message will be selected, and money that is stored in the contract will be sent to that user. The message will be deleted from the smart contract.
+
+## Known Issues
+
+* What happens if the message sender includes a bogus message ID, public nonce, or private nonce when transmitting the message to his/her peers?
+    * In this case, users will be unable to call `addHop` and `receiveMessage`.
+* Since the message ID and public nonce are stored in clear text, what happens if other users tamper with those values before retransmitting the message?
+* Currently the smart contract sends the entire global pool to a user when `receiveMessage` is called. This should probably be changed to just some percentage of the global pool
