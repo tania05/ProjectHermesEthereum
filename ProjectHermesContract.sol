@@ -36,6 +36,12 @@ contract ProjectHermes {
 	//The sender must provide a minimum amount of Ether, which will be stored by the contract
 	//and distributed to a random user who helps carry the message to its destination.
 	function newMessage(string _msgId, bytes32 _hashFromPubNonce, bytes32 _hasFromPrivNonce) payable {
+
+		//We don't want malicious users trying to overwrite a message that already exists
+		if(messages[_msgId].exists) {
+			throw;
+		}
+
 		if(msg.value < minValue) {
 			NotEnoughMessageValue(msg.value, minValue);
 			throw;
