@@ -1,4 +1,3 @@
-
 ## Contract Address
 
 You will need to know the address where the of the smart contract before you can interact with it. The contract is stored on the Rinkeby network at the following address `0xAc7d48eb7Ca5bcd18a03c3C517EA1238D80D1cf4`
@@ -49,5 +48,7 @@ The smart contract will compute the SHA-256 hash of the `_msgID` concatenated wi
 
 * What happens if the message sender includes a bogus message ID, public nonce, or private nonce when transmitting the message to his/her peers?
     * In this case, users will be unable to call `addHop` and `receiveMessage`.
+    * We think this isn't an issue because we can just have the hop devices only redistribute a message if they are successfully able to call addHop
 * Since the message ID and public nonce are stored in clear text, what happens if other users tamper with those values before retransmitting the message?
+    * We think this isn't an issue because a hopping device doesn't gain any benefit from tampering with the message. If the message ID is tampered with, then the receiver will never be able to call receiveMessage, preventing money from being distributed. If the public nonce is tampered with, then other devices will just stop distributing the message.
 * Currently the smart contract sends the entire global pool to a user when `receiveMessage` is called. This should probably be changed to just some percentage of the global pool
