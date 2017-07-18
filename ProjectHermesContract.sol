@@ -14,13 +14,13 @@ contract ProjectHermes {
 	}
 
 	//Map message ID to MessageInfo
-	mapping(string => MessageInfo) messages;
+	mapping(bytes16 => MessageInfo) messages;
 
 	//Event to help test when a a message is created but not enough money is sent
 	event NotEnoughMessageValue(uint _valueSent, uint _minValue);
 
 	//Event to help test when a message has been created/updated
-	event MessageUpdated(string _msgId, bytes32 _publicHash, bytes32 _privateHash, address[] _msgCarrierWallets);
+	event MessageUpdated(bytes16 _msgId, bytes32 _publicHash, bytes32 _privateHash, address[] _msgCarrierWallets);
 
 	//Event to help test when the global money pool has been updated
 	event GlobalPoolUpdated(uint _amount);
@@ -36,7 +36,7 @@ contract ProjectHermes {
 	//This is meant to be called when someone creates a new message that they are sending.
 	//The sender must provide a minimum amount of Ether, which will be stored by the contract
 	//and distributed to a random user who helps carry the message to its destination.
-	function newMessage(string _msgId, bytes32 _hashFromPubNonce, bytes32 _hasFromPrivNonce) payable {
+	function newMessage(bytes16 _msgId, bytes32 _hashFromPubNonce, bytes32 _hasFromPrivNonce) payable {
 
 		//We don't want malicious users trying to overwrite a message that already exists
 		if(messages[_msgId].exists) {
@@ -59,7 +59,7 @@ contract ProjectHermes {
 	//This is meant to be called when an intermediate devices receives a message
 	//so that the owner of that device has the potential to be awarded money for
 	//helping to deliver that message to the intended recipient
-	function addHop(string _msgId, string _publicNonce) {
+	function addHop(bytes16 _msgId, bytes16 _publicNonce) {
 
 		MessageInfo message = messages[_msgId];
 
@@ -82,7 +82,7 @@ contract ProjectHermes {
 	//carrier wallets in order to provide incentive for the receiver to declare
 	//that a message was received. The money from the global pool will automatically
 	//be distributed to one of the devices that helped carry the message (which includes the recipient)
-	function receiveMessage(string _msgId, string _privateNonce) {
+	function receiveMessage(bytes16 _msgId, bytes16 _privateNonce) {
 
 		MessageInfo message = messages[_msgId];
 
@@ -118,7 +118,7 @@ contract ProjectHermes {
 
 	//Adds a user's wallet to the list of wallets corresponding to the
 	//users who helped carry a message.
-	function addMessageCarrier(string _msgId) private {
+	function addMessageCarrier(bytes16 _msgId) private {
 		MessageInfo message = messages[_msgId];
 		address[] wallets = message.messageCarrierWallets;
 		bool arrayContainsSender = false;
